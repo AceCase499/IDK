@@ -1,222 +1,100 @@
-package csc252;
 import java.util.Scanner;
 public class VoteRecorder {
+	static String prezCandName1;
+	static String prezCandName2;
+	static String vpCandName1;
+	static String vpCandName2;
+	static int prezVotes1;
+	static int prezVotes2;
+	static int vpVotes1;
+	static int vpVotes2;
 	
-	static String nameCandidatePresident1;
-	static String nameCandidatePresident2;
-	static String nameCandidateVicePresident1;
-	static String nameCandidateVicePresident2;
-	static int canPresVotes1;
-	static int canPresVotes2;
-	static int canViPresVotes1;
-	static int canViPresVotes2;
-	static int myVoteForPresident;
-	static int myVoteForVicePresident;
-	static String presVoteChoice;
-	static String viPresVoteChoice;
-	
-	
-	public static void setCandidatesPresident(String nameCandidatePresident1, String nameCandidatePresident2){
-		nameCandidatePresident1 = "Annie";
-		nameCandidatePresident2 = "Bob";
-	}
-	public static void setCandidatesVicePresident(String nameCandidateVicePresident1, String nameCandidateVicePresident2){
-		nameCandidateVicePresident1 = "John";
-		nameCandidateVicePresident2 = "Susan";
-	}
-	
-	public static String getCurrentVotePresident() {
-		
-		return "Votes for Annie: " + canPresVotes1 + "    " + "Votes for Bob: " + canPresVotes2;
-	}
-	
-    public static String getCurrentVoteVicePresident() {
-    	
-		return "Votes for John: " + canViPresVotes1 + "    " + "Votes for Susan: " + canViPresVotes2;
-	}
+	public static void setCandidatesPresident(String newName1, String newName2){VoteRecorder.prezCandName1 = newName1;VoteRecorder.prezCandName2 = newName2;}
+	public static void setCandidatesVicePresident(String newName1, String newName2){VoteRecorder.vpCandName1 = newName1;VoteRecorder.vpCandName2 = newName2;}
+	public static String getCurrentVotePresident(){return "Votes for " + prezCandName1 +": " + prezVotes1 + "\nVotes for " + prezCandName2+": " + prezVotes2;}
+    public static String getCurrentVoteVicePresident(){return "Votes for " + vpCandName1 +": " + vpVotes1 + "\nVotes for " + vpCandName2+": " + vpVotes2;}
 
-	
-    public static void resetVotes(){
-    	canPresVotes1 = 0;
-		canPresVotes2 = 0;
-		canViPresVotes1 = 0;
-		canViPresVotes2 = 0;
-    }
+    public static void resetVotes(){prezVotes1 = 0;prezVotes2 = 0;vpVotes1 = 0;vpVotes2 = 0;}
     
+    private static int recordVotePrezCand1(){prezVotes1++;return prezVotes1;}
+    private static int recordVotePrezCand2(){prezVotes2++;return prezVotes2;}
+    private static int recordVoteVPcand1(){vpVotes1++;return vpVotes1;}
+    private static int recordVoteVPcand2(){vpVotes2++;return vpVotes2;}
     
-    private static int recordVotes(){
-		
-		canPresVotes1++;
-		return canPresVotes1;
-}
-    private static int recordVotes2(){
-		
-		canPresVotes2++;
-		return canPresVotes2;
-}
-    private static int recordVotes3(){
-	
-	    canViPresVotes1++;
-	    return canViPresVotes1;
-}
-    private static int recordVotes4(){
-	
-    	canViPresVotes2++;
-    	return canViPresVotes2;
-}
+    public Boolean confirmVote(String choice) {
+    	Scanner keyboard = new Scanner(System.in);
+    	System.out.printf("Your vote is for %s. Is this correct? (Enter 'yes' or 'no'.)%n", choice);
+	     return keyboard.next().equals("yes");}
     
-    
-public static void getAndConfirmVotes(){
-	Scanner keyboard = new Scanner(System.in);
-	//user votes for president
-	System.out.println("Enter your vote for President. (1 for Annie, 2 for Bob, 0 for neither.)");
-	myVoteForPresident = keyboard.nextInt();
-	keyboard.nextLine();
+	public void castPrezVote(){
+		Boolean validInput = false;
+		Scanner keyboard = new Scanner(System.in);
+		while (!validInput) {
+			try{
+				System.out.printf("Enter your vote for President. (1 for %s, 2 for %s, 0 for neither.)%n", prezCandName1, prezCandName2);
+				String choiceInput = keyboard.nextLine();
+				switch(choiceInput){
+				case "1":
+					if(this.confirmVote(prezCandName1)) {
+						recordVotePrezCand1();
+						System.out.println("Input Confirmed: Your vote was recorded."); validInput = true;}
+					break;
+				case "2":
+					if(this.confirmVote(prezCandName2)) {
+						recordVotePrezCand2();
+						System.out.println("Input Confirmed: Your vote was recorded."); validInput = true;}
+					break;
+				case "0":
+					if(this.confirmVote("-No one-")) {
+						System.out.println("Input Confirmed: No new votes recorded."); validInput = true;}
+					break;
+				default:
+					System.out.println("Input not recognized. Enter 1, 2, or 0.");}}
+			catch(java.util.InputMismatchException badInput) {
+				System.out.println("Input not recognized. Enter 1, 2, or 0.");}} keyboard.close();}
 	
-	switch(myVoteForPresident){
-	
-	case 0:
-	     System.out.println("Your vote is for no one. Is this correct? (Enter 'yes' or 'no'.)");
-	     presVoteChoice = keyboard.nextLine();
-	     if(presVoteChoice.equals("yes")){
-	    	 System.out.println("No vote entered...\n");
-	    	 break;
-	     }
-	     if(presVoteChoice.equals("no")){
-	    	 System.out.print("Your vote was discarded. Please enter a new one.");
-	    	 System.exit(0);
-	     }
-	     if((!(presVoteChoice.equals("yes"))) || (!(presVoteChoice.equals("no")))){
-	    	 keyboard.nextLine();
-	    	 System.out.print("Input unrecognized. Please try again(from case 0).");
-	    	 System.exit(0);
-	     }  
-	     break;
-	     
-	case 1:
-		System.out.println("Your vote is for Annie. Is this correct? (Enter 'yes' or 'no'.)");
-		presVoteChoice = keyboard.nextLine();
-		if(presVoteChoice.equals("yes")){
-	    	 System.out.println("Your vote has been entered.\n");
-	    	 recordVotes();
-	     }
-	     if(presVoteChoice.equals("no")){
-	    	 System.out.println("Your vote was discarded. Please enter a new one.");
-	    	 System.exit(0);
-	     }
-	     if((!(presVoteChoice.equals("yes"))) && (!(presVoteChoice.equals("no")))){
-	    	 System.out.print("Input unrecognized, vote discarded. Please reenter vote.");
-	    	 System.exit(0);
-	     }  
-	     break;
-	case 2:
-		System.out.println("Your vote is for Bob. Is this correct? (Enter 'yes' or 'no'.)");
-		presVoteChoice = keyboard.nextLine();
-		if(presVoteChoice.equals("yes")){
-	    	 System.out.println("Your vote has been entered.\n");
-	    	 recordVotes2();
-	     }
-	     if(presVoteChoice.equals("no")){
-	    	 System.out.println("Your vote was discarded. Please enter a new one.");
-	    	 System.exit(0);
-	     }
-	     if((!(presVoteChoice.equals("yes"))) && (!(presVoteChoice.equals("no")))){
-	    	 System.out.println("Input unrecognized. Please try again(from case 2).");
-	    	 System.exit(0);
-	     }
-	     break;
-	default:
-		if((!(presVoteChoice.equals(0))) && (!(presVoteChoice.equals(1))) && (!(presVoteChoice.equals(2)))){
-			System.out.println("Input unrecognized. Please try again(from default).");
-	   	    System.exit(0);
-		}
-	}
-
-	//user votes for vice president
-		System.out.println("Enter your vote for Vice President. (1 for John, 2 for Susan, 0 for neither.)");
-		myVoteForVicePresident = keyboard.nextInt();
-		keyboard.nextLine();
-		
-		switch(myVoteForVicePresident){
-		
-		case 0:
-		     System.out.println("Your vote is for no one. Is this correct? (Enter 'yes' or 'no'.)");
-		     viPresVoteChoice = keyboard.nextLine();
-		     if(viPresVoteChoice.equals("yes")){
-		    	 System.out.println("No vote entered...\n");
-		    	 break;
-		     }
-		     if(viPresVoteChoice.equals("no")){
-		    	 System.out.println("Your vote was discarded. Please enter a new one.");
-		    	 System.exit(0);
-		     }
-		     if((!(viPresVoteChoice.equals("yes"))) || (!(viPresVoteChoice.equals("no")))){
-		    	 System.out.print("Input unrecognized. Please try again.(from case 0)");
-		    	 System.exit(0);
-		     }  
-		     break;
-		     
-		case 1:
-			System.out.println("Your vote is for John. Is this correct? (Enter 'yes' or 'no'.)");
-			viPresVoteChoice = keyboard.nextLine();
-			if(viPresVoteChoice.equals("yes")){
-		    	 System.out.println("Your vote has been entered...\n\n");
-		    	 recordVotes3();
-		    	 break;
-		     }
-		     if(viPresVoteChoice.equals("no")){
-		    	 System.out.println("Your vote was discarded. Please enter a new one.");
-		    	 System.exit(0);
-		     }
-		     if((!(viPresVoteChoice.equals("yes"))) || (!(viPresVoteChoice.equals("no")))){
-		    	 System.out.print("Input unrecognized. Please try again.(from case 1)");
-		    	 System.exit(0);
-		     }  
-		     break;
-		 		
-		case 2:
-			System.out.println("Your vote is for Susan. Is this correct?");
-			viPresVoteChoice = keyboard.nextLine();
-			if(viPresVoteChoice.equals("yes")){
-		    	 System.out.println("Your vote has been entered...\n\n");
-		    	 recordVotes4();
-		    	 break;
-		     }
-		     if(viPresVoteChoice.equals("no")){
-		    	 System.out.println("Your vote was discarded. Please enter a new one.");
-		    	 System.exit(0);
-		     }
-		     if((!(viPresVoteChoice.equals("yes"))) && (!(viPresVoteChoice.equals("no")))){
-		    	 System.out.print("Input unrecognized. Please try again.(from case 2)");
-		    	 System.exit(0);
-		     }
-		     break;
-		default:
-			System.out.print("Input unrecognized. Please try again.");
-			System.exit(0);
-		}
-    }
-	
-	
+	public void castVPvote() {
+		Boolean validInput = false;
+		Scanner keyboard = new Scanner(System.in);
+		while (!validInput) {
+			try {
+				System.out.printf("Enter your vote for VICE President. (1 for %s, 2 for %s, 0 for neither.)%n", vpCandName1, vpCandName2);
+				String choiceInput = keyboard.nextLine();
+				switch(choiceInput){
+				case "1":
+					if(this.confirmVote(vpCandName1)) {
+						recordVoteVPcand1();
+						System.out.println("Input Confirmed: Your vote was recorded."); validInput = true;}
+					break;
+				case "2":
+					if(this.confirmVote(vpCandName2)) {
+						recordVoteVPcand2();
+						System.out.println("Input Confirmed: Your vote was recorded."); validInput = true;}
+					break;
+				case "0":
+					if(this.confirmVote("-No one-")) {
+						System.out.println("Input Confirmed: No new votes recorded."); validInput = true;}
+					break;
+				default:
+					System.out.println("Input not recognized. Enter 1, 2, or 0.");}}
+			catch(java.util.InputMismatchException badInput) {
+				System.out.println("Input not recognized. Enter 1, 2, or 0.");}}
+	keyboard.close();}
 
 public static void main(String[] args) {
-    VoteRecorder.setCandidatesPresident("Annie", "Bob");
-    VoteRecorder.setCandidatesVicePresident("John", "Susan");
+    VoteRecorder.setCandidatesPresident("Mark", "Allie");
+    VoteRecorder.setCandidatesVicePresident("Frank", "Grace");
     VoteRecorder.resetVotes();
-
     boolean moreVotes = true;
+    Scanner keyboard = new Scanner(System.in);
 
     while(moreVotes){
-        VoteRecorder aVoter = new VoteRecorder();
-        aVoter.getAndConfirmVotes();
-        System.out.println("Type yes if there is another voter");
-        Scanner keyboard = new Scanner(System.in);
+        VoteRecorder newVoter = new VoteRecorder();
+        newVoter.castPrezVote();
+        newVoter.castVPvote();
+        System.out.println("Enter 'yes' to cast a vote. Enter something else to exit.");
         moreVotes = keyboard.next().equals("yes");
-
     }
-
     System.out.println(VoteRecorder.getCurrentVotePresident());
     System.out.println(VoteRecorder.getCurrentVoteVicePresident());
-  }
-
-}
+    keyboard.close();}}
